@@ -9,7 +9,7 @@ classification (ResNet18 + Grad-CAM) on Galaxy10 DECaLS.
 Validation accuracy ~72% across 10 classes, with interpretable
 heatmaps landing on real galaxy structure.
 
-![Grad-CAM on a merging galaxy](notebooks/first_gradcam.png)
+![Grad-CAM on a merging galaxy](first_gradcam.png)
 
 ## Stack
 Python · PyTorch · FastAPI · Next.js · PostgreSQL
