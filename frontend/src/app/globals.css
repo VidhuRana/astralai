@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+/*
+  Tailwind v4 is configured in CSS rather than a tailwind.config.js. The @theme
+  block below defines design tokens; anything declared here becomes available as
+  a utility class (e.g. --color-void generates bg-void, text-void).
+*/
+
+:root {
+  /* Near-black rather than pure #000: a hint of blue keeps the page from
+     looking like a dead pixel field, and gives the galaxy imagery — which is
+     itself almost black — something to sit against. */
+  --background: #05060a;
+  --foreground: #e8eaf0;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  background: var(--background);
+  color-scheme: dark;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  /* Stars are painted on a fixed pseudo-element below, so the body itself must
+     not clip them when content is short. */
+  position: relative;
+  overflow-x: hidden;
+}
+
+/*
+  Star field — pure CSS, no images and no JS.
+
+  Each radial-gradient paints one small dot inside a tile, and background-repeat
+  tiles it across the viewport. Three layers at different tile sizes and
+  opacities read as depth: the small faint dots feel far away, the larger
+  brighter ones near. The whole thing costs nothing at runtime.
+*/
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1px 1px at 24px 38px, rgba(255, 255, 255, 0.35), transparent),
+    radial-gradient(1px 1px at 137px 92px, rgba(255, 255, 255, 0.28), transparent),
+    radial-gradient(1px 1px at 208px 165px, rgba(255, 255, 255, 0.4), transparent),
+    radial-gradient(1px 1px at 61px 214px, rgba(255, 255, 255, 0.22), transparent),
+    radial-gradient(1.6px 1.6px at 178px 41px, rgba(186, 230, 253, 0.45), transparent),
+    radial-gradient(1.6px 1.6px at 45px 128px, rgba(221, 214, 254, 0.32), transparent);
+  background-size: 260px 260px;
+  background-repeat: repeat;
+  opacity: 0.75;
+  animation: drift 240s linear infinite;
+}
+
+/*
+  A wide, very soft glow behind the content — the suggestion of a galactic core
+  off the top of the page. Keeps the composition from being a flat black
+  rectangle without drawing attention to itself.
+*/
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 70% 45% at 50% -10%,
+      rgba(56, 189, 248, 0.09),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 55% 40% at 85% 15%,
+      rgba(167, 139, 250, 0.07),
+      transparent 70%
+    );
+}
+
+@keyframes drift {
+  from {
+    background-position:
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      0 0;
+  }
+  to {
+    background-position:
+      260px 520px,
+      260px 520px,
+      260px 520px,
+      260px 520px,
+      260px 520px,
+      260px 520px;
+  }
+}
+
+/* Anyone who has asked their OS to reduce motion gets a still sky. */
+@media (prefers-reduced-motion: reduce) {
+  body::before {
+    animation: none;
+  }
+}
+
+/* A visible, consistent focus ring everywhere — keyboard users should never
+   have to guess where they are. */
+:focus-visible {
+  outline: 2px solid rgb(34 211 238);
+  outline-offset: 3px;
+  border-radius: 4px;
+}

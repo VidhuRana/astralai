@@ -4,16 +4,36 @@ An explainable AI platform for astronomical image analysis.
 MCA final-year capstone project.
 
 ## Status
-🚧 Week 2 complete — the Week 1 model is now served over HTTP.
-Week 1 proved the ML pipeline: galaxy morphology classification
-(ResNet18 + Grad-CAM) on Galaxy10 DECaLS, ~72% validation accuracy
-across 10 classes, with interpretable heatmaps landing on real
-galaxy structure.
+🚧 Week 3 complete — the project now has a face. Week 1 proved the
+ML pipeline (ResNet18 + Grad-CAM on Galaxy10 DECaLS, ~72% validation
+accuracy across 10 classes), Week 2 served it over HTTP, and Week 3
+added a Next.js frontend that consumes that API across origins.
 
 ![Grad-CAM on a merging galaxy](first_gradcam.png)
 
 ## Stack
 Python · PyTorch · FastAPI · Next.js · PostgreSQL
+
+## Running the whole thing
+
+Two apps, two ports, one JSON contract between them. Both must be running.
+
+```bash
+# terminal 1 — inference API on :8000
+cd backend
+.venv\Scripts\python.exe -m uvicorn main:app --host 127.0.0.1 --port 8000
+
+# terminal 2 — web UI on :3000
+cd frontend
+npm install
+npm run dev
+```
+
+Open <http://localhost:3000>, drop in a galaxy image, and you get the predicted
+morphology, a confidence percentage, and the Grad-CAM heatmap beside the
+original.
+
+The weights are not in this repo — see the Inference API section below.
 
 ## Inference API (Week 2)
 
@@ -86,11 +106,27 @@ backend/
 `inference.py` contains no web code and `main.py` contains no ML code, so the
 model can be tested independently of the server.
 
+## Web UI (Week 3)
+
+A separate Next.js app (App Router, TypeScript, Tailwind) in `frontend/`, running
+on its own dev server and talking to the API across origins. Deliberately a
+separate app rather than templates served by FastAPI, because the project is
+meant to grow into a multi-module platform.
+
+One screen: drop a galaxy image, watch it infer, see the original and the
+Grad-CAM overlay side by side with the class and confidence. Predictions below
+50% confidence are explicitly flagged as uncertain — the model is ~72% accurate,
+and a bare percentage next to a confident-looking class name overstates what it
+actually knows.
+
+Configure the API base with `NEXT_PUBLIC_API_URL` (see `frontend/.env.example`).
+Details and the three upload gotchas are in `frontend/README.md`.
+
 ## Roadmap
 - [x] Repo setup
 - [x] Galaxy classifier + Grad-CAM (Week 1)
 - [x] FastAPI inference endpoint (Week 2)
-- [ ] Web UI + upload flow
+- [x] Web UI + upload flow (Week 3)
 - [ ] Research dashboard
 - [ ] AI astronomy assistant
 - [ ] *Stretch:* exoplanet light-curve detector
