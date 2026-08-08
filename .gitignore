@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Model weights and datasets (too large for git — see README for how to obtain)
+*.pth
+*.pt
+*.h5
+
+# Exported test galaxies — regenerate from the Week 1 notebook.
+# See backend/test_images/README.md, which is deliberately NOT ignored.
+backend/test_images/*.png
+
+# Local outputs
+gradcam_out.png
+
+# Secrets
+.env
+.env.local
+
+# Editors / OS
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini

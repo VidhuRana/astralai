@@ -1,0 +1,20 @@
+# AstralAI Week 2 — inference API dependencies
+#
+# Install with:   .venv\Scripts\python.exe -m pip install -r requirements.txt
+#
+# Notes:
+#   * On Windows, the PyPI `torch` wheel is already the CPU-only build. CUDA builds
+#     come from a separate index (download.pytorch.org), which we do not need.
+#   * `grad-cam` is the PyPI package name; the import name is `pytorch_grad_cam`.
+#     It pulls in opencv-python, ttach, scipy and matplotlib transitively.
+#   * `python-multipart` is never imported by our code, but FastAPI requires it to
+#     parse multipart/form-data uploads. Without it, `UploadFile` fails at import.
+
+torch>=2.2,<3
+torchvision>=0.17,<1
+fastapi>=0.110,<1
+uvicorn[standard]>=0.29,<1
+python-multipart>=0.0.9
+pillow>=10.0
+grad-cam>=1.5
+numpy>=1.26
